@@ -1,30 +1,9 @@
-import * as signalR from "@microsoft/signalr";
-import { Observable, Subject } from "rxjs";
+import * as signalR from '@microsoft/signalr';
+import { Observable, Subject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { ResourceBase, ResourceSocket } from "./resource";
-import { ConnectionStatus, SocketManager } from "./socket-manager";
-
-class ConnectionManager {
-    
-    public connectionStatus = new Subject<ConnectionStatus>(); 
-
-    private hubConnection: signalR.HubConnection;
-
-    constructor(private url: string) {
-        this.hubConnection = new signalR.HubConnectionBuilder().withUrl(url).build();
-        this.hubConnection.start().then(() => {
-            this.connectionStatus.next(ConnectionStatus.Connected);
-        });
-        this.hubConnection.onclose(() => {
-            this.connectionStatus.next(ConnectionStatus.Disconnected);
-        });
-    }
-
-    handleOnClose() {
-
-    }
-}
+import { ConnectionStatus, SocketManager } from './socket-manager';
 
 export class SignalRSocketManager extends SocketManager {
 
@@ -59,38 +38,38 @@ export class SignalRSocketManager extends SocketManager {
         });
 
         return observable.pipe(startWith({...resource}),
-                               map((newData: any) => { 
-                                   this.update(resource, newData); 
+                               map((newData: any) => {
+                                   this.update(resource, newData);
                                    return resource;
                                 }));
     }
 
     private update (targetObject: any, obj: any) {
       Object.keys(obj).forEach((key) => {
-    
+
         // delete property if set to undefined or null
         if ( undefined === obj[key] || null === obj[key] ) {
           delete targetObject[key]
         }
-    
+
         // property value is object, so recurse
-        else if ( 
-            'object' === typeof obj[key] 
-            && !Array.isArray(obj[key]) 
+        else if (
+            'object' === typeof obj[key]
+            && !Array.isArray(obj[key])
         ) {
-    
+
           // target property not object, overwrite with empty object
-          if ( 
-            !('object' === typeof targetObject[key] 
-            && !Array.isArray(targetObject[key])) 
+          if (
+            !('object' === typeof targetObject[key]
+            && !Array.isArray(targetObject[key]))
           ) {
             targetObject[key] = {}
           }
-    
+
           // recurse
           this.update(targetObject[key], obj[key])
         }
-    
+
         // set target property to update property
         else {
           targetObject[key] = obj[key]

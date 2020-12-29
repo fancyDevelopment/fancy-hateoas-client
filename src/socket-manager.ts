@@ -1,5 +1,5 @@
-import { Observable } from "rxjs";
-import { ResourceBase, ResourceSocket } from "./resource";
+import { Observable } from 'rxjs';
+import { ResourceBase, ResourceSocket } from './resource';
 
 export enum ConnectionStatus {
     Connected,

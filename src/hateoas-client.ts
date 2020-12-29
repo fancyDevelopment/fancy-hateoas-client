@@ -13,7 +13,7 @@ export class HateoasClient {
         } else {
             this.injectHateoasProperties(resource);
         }
-        
+
         return resource;
     }
 
