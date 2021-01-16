@@ -1,4 +1,4 @@
-import { RequestManager } from "./request-manager";
+import { RequestManager } from  "./request-manager";
 import { ResourceBase } from "./resource";
 import { SocketManager } from "./socket-manager";
 
@@ -37,13 +37,7 @@ export class HateoasClient {
             for (const linkKey in resource._links) {
                 if (resource._links.hasOwnProperty(linkKey)) {
                     const resourceLink = resource._links[linkKey];
-                    resource['fetch-' + linkKey] = () => {
-                        return new Promise<object>(async (resolve, reject) => {
-                            const connectedResource = await this.requestManager.fetch(resourceLink.href);
-                            this.injectHateoasProperties(connectedResource);
-                            resolve(connectedResource);
-                        });
-                    };
+                    resource['fetch_' + linkKey] = () => this.fetch(resourceLink.href);
                 }
             }
         }

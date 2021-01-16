@@ -1,4 +1,4 @@
-import { ResourceAction, ResourceBase } from "./resource";
+import { ResourceAction, ResourceBase, ResourceLink } from "./resource";
 
 export type ActionFunc = (body?: any) => Promise<any>;
 

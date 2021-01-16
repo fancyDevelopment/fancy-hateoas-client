@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { ResourceBase, ResourceSocket } from "./resource";
+import { SignalRConnectionManager } from './signalr-connection-manager';
 import { ConnectionStatus, SocketManager } from './socket-manager';
 
 export class SignalRSocketManager extends SocketManager {
@@ -10,7 +11,7 @@ export class SignalRSocketManager extends SocketManager {
     public connectionStatus: Observable<ConnectionStatus>;
 
     public connectionStatusSubject: Subject<ConnectionStatus>;
-    private signalRConnections: { [key: string]: signalR.HubConnection } = { };
+    private signalRConnections: { [key: string]: SignalRConnectionManager} = { };
 
     constructor() {
         super();
@@ -22,19 +23,20 @@ export class SignalRSocketManager extends SocketManager {
         const observable = new Observable(subscriber => {
             // Check if there is already a connection for this url
             if(!this.signalRConnections[socket.href]) {
-                // No connection is availalbe, create a new one
-                this.signalRConnections[socket.href] = new signalR.HubConnectionBuilder().withUrl(socket.href).build();
-                this.signalRConnections[socket.href].start().then(() => {
-                    // Successfully connectd
-                })
-                .catch(() => {
-                    // Error connecting to hub
-                });
+                // No connection manager is availalbe, create a new one
+                this.signalRConnections[socket.href] = new SignalRConnectionManager(socket.href);
             }
+
+            this.signalRConnections[socket.href].addRef();
 
             this.signalRConnections[socket.href].on(socket.method, (newData: any) => {
                 subscriber.next(newData);
             });
+
+            // Return the unsubscribe function
+            return () => {
+              this.signalRConnections[socket.href].removeRef();
+            };
         });
 
         return observable.pipe(startWith({...resource}),

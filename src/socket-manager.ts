@@ -3,7 +3,7 @@ import { ResourceBase, ResourceSocket } from './resource';
 
 export enum ConnectionStatus {
     Connected,
-    PartlyConnected,
+    Reconnecting,
     Disconnected
 }
 
