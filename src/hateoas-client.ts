@@ -1,12 +1,22 @@
+import { AxiosRequestManager } from ".";
 import { RequestManager } from  "./request-manager";
 import { ResourceBase } from "./resource";
 import { SocketManager } from "./socket-manager";
 
 export class HateoasClient {
-    constructor(private requestManager: RequestManager, private socketManager: SocketManager) {}
+
+    private _requestManager: RequestManager;
+
+    constructor(requestManager?: RequestManager, private _socketManager?: SocketManager) {
+        if(requestManager) {
+            this._requestManager = requestManager;
+        } else {
+            this._requestManager = new AxiosRequestManager();
+        }
+    }
 
     public async fetch(url: string): Promise<ResourceBase | ResourceBase[]> {
-        const resource = await this.requestManager.fetch(url);
+        const resource = await this._requestManager.fetch(url);
 
         if(Array.isArray(resource)) {
             resource.forEach(r => this.injectHateoasProperties(r));
@@ -20,7 +30,10 @@ export class HateoasClient {
     public injectHateoasProperties(resource: ResourceBase) {
         this.injectLinks(resource);
         this.injectActions(resource);
-        this.injectSockets(resource);
+
+        if(this._socketManager) {
+            this.injectSockets(resource);
+        }
 
         for (const key in resource) {
             if (resource.hasOwnProperty(key)) {
@@ -48,18 +61,21 @@ export class HateoasClient {
             for (const actionKey in resource._actions) {
                 if (resource._actions.hasOwnProperty(actionKey)) {
                     const resourceAction = resource._actions[actionKey];
-                    resource[actionKey] = this.requestManager.createActionFunc(resource, resourceAction);
+                    resource[actionKey] = this._requestManager.createActionFunc(resource, resourceAction);
                 }
             }
         }
     }
 
     private injectSockets(resource: ResourceBase) {
+        if(!this._socketManager) {
+            throw new Error('No socket manager set to HateoasClient');
+        }
         if (resource._sockets) {
             for (const socketKey in resource._sockets) {
                 if (resource._sockets.hasOwnProperty(socketKey)) {
                     const resourceSocket = resource._sockets[socketKey];
-                    resource[socketKey + '$'] = this.socketManager.createSocketObserver(resource, resourceSocket);
+                    resource[socketKey + '$'] = this._socketManager.createSocketObserver(resource, resourceSocket);
                 }
             }
         }
