@@ -4,7 +4,7 @@ import { RequestManager } from "./request-manager";
 
 export class AxiosRequestManager extends RequestManager {
 
-    constructor(private _tokenProvider?: SecurityTokenProvider) {
+    constructor(private _tokenProvider?: SecurityTokenProvider, private _additionalHeaders?: {[key: string]: string}, private _authorizationScheme?: string) {
         super();
     }
 
@@ -13,8 +13,17 @@ export class AxiosRequestManager extends RequestManager {
         let headers: any = {};
 
         if(this._tokenProvider) {
+            if(!this._authorizationScheme) {
+                this._authorizationScheme = 'Bearer';
+            }
             const accessToken = await this._tokenProvider.retrieveCurrentToken();
-            headers['Authorization'] = 'Bearer ' + accessToken;
+            headers['Authorization'] = this._authorizationScheme + ' ' + accessToken;
+        }
+
+        if(this._additionalHeaders) {
+            for(let key in this._additionalHeaders) {
+                headers[key] = this._additionalHeaders[key];
+            }
         }
 
         let response: AxiosResponse<any>;
