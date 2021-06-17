@@ -34,12 +34,11 @@ export class AxiosRequestManager extends RequestManager {
                 response = await axios.get(url, { headers });
                 break;
             case 'PUT':
-            case 'POST':
                 headers['Content-Type'] = 'application/json';
-            case 'PUT':
                 response = await axios.put(url, body, { headers });
                 break;
             case 'POST':
+                headers['Content-Type'] = 'application/json';
                 response = await axios.post(url, body, { headers });
                 break;
             case 'DELETE':

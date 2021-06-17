@@ -3,7 +3,7 @@ import { ResourceAction, ResourceBase, ResourceLink } from "./resource";
 export type ActionFunc = (body?: any) => Promise<any>;
 
 export abstract class RequestManager {
-    fetch(url: string): Promise<ResourceBase | ResourceBase[]> {
+    fetch(url: string): Promise<ResourceBase | ResourceBase[] | null> {
         return this.request('GET', url);
     }
 

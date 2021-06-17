@@ -2,6 +2,8 @@
 export interface ResourceLink {
     /** The url to the connected resource. */
     href: string
+    /** Fetches the linked resource with optional parameters. */
+    fetch?(queryParams?: {[key: string]: string | number }): Promise<ResourceBase | ResourceBase[] | null>
 }
 
 /** Contains information to an action which can be executed on the resource. */
