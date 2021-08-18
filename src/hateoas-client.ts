@@ -25,12 +25,12 @@ export class HateoasClient {
         }
     }
 
-    public async fetch(url: string): Promise<ResourceBase | ResourceBase[] | null> {
+    public async fetch(url: string): Promise<ResourceBase | ResourceBase[]> {
         const resource = await this._requestManager.fetch(url);
 
         if(Array.isArray(resource)) {
             resource.forEach(r => this.injectHateoasProperties(r));
-        } else if( resource !== null) {
+        } else {
             this.injectHateoasProperties(resource);
         }
 
