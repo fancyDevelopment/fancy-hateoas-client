@@ -21,6 +21,7 @@ export class SignalRSocketManager extends SocketManager {
 
     public createSocketObserver(resource: ResourceBase, socket: ResourceSocket) {
         const observable = new Observable(subscriber => {
+            console.log("Starting observable for " + socket.method);
             // Check if there is already a connection for this url
             if(!this.signalRConnections[socket.href]) {
                 // No connection manager is availalbe, create a new one
@@ -30,6 +31,7 @@ export class SignalRSocketManager extends SocketManager {
             this.signalRConnections[socket.href].addRef();
 
             this.signalRConnections[socket.href].on(socket.method, (newData: any) => {
+              console.log('Received socket event: ' + socket.method);
                 subscriber.next(newData);
             });
 
@@ -40,9 +42,11 @@ export class SignalRSocketManager extends SocketManager {
         });
 
         return observable.pipe(startWith({...resource}),
-                               map((newData: any) => {
-                                   this.update(resource, newData);
-                                   return resource;
+                               map((data: any) => {
+                                 // Create a new object
+                                var newObj = {...data};
+                                this.update(newObj, data);
+                                return newObj;
                                 }));
     }
 
