@@ -1,6 +1,6 @@
 {
   "name": "fancy-hateoas-client",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A client to interact with HATEOAS resources",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,14 +26,14 @@
   },
   "homepage": "https://github.com/fancyDevelopment/fancy-hateoas-client#readme",
   "peerDependencies": {
-    "@microsoft/signalr": "^5.0.6",
-    "axios": "^0.21.1",
+    "@microsoft/signalr": ">= 5.0.0",
+    "axios": "^1.0.0",
     "rxjs": "^7.0.1"
   },
   "devDependencies": {
     "@microsoft/signalr": "5.0.6",
     "@types/jest": "^26.0.16",
-    "axios": "0.21.1",
+    "axios": "1.0.0",
     "jest": "^26.6.3",
     "rimraf": "^3.0.2",
     "rxjs": "7.0.1",

@@ -1,4 +1,3 @@
-import * as signalR from '@microsoft/signalr';
 import { Observable, Subject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
