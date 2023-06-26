@@ -1,7 +1,6 @@
 import { AxiosRequestManager } from ".";
 import { RequestManager } from  "./request-manager";
 import { ResourceBase } from "./resource";
-import { ResourceEndpoint } from "./resource-endpoint";
 import { SocketManager } from "./socket-manager";
 
 /**
@@ -60,8 +59,11 @@ export class HateoasClient {
             for (const linkKey in resource._links) {
                 if (resource._links.hasOwnProperty(linkKey)) {
                     const resourceLink = resource._links[linkKey];
-                    resource['fetch_' + linkKey] = () => this.fetch(resourceLink.href);
-                    resource._links[linkKey] = new ResourceEndpoint(resourceLink.href, this);
+                    const fetchFunc = this.createFetchFunc(resourceLink.href)
+
+                    // Add the fetch func to the root object as well as to the link object
+                    resource['fetch_' + linkKey] = fetchFunc;
+                    resource._links[linkKey].fetch = fetchFunc;
                 }
             }
         }
@@ -89,6 +91,23 @@ export class HateoasClient {
                     resource[socketKey + '$'] = this._socketManager.createSocketObserver(resource, resourceSocket);
                 }
             }
+        }
+    }
+
+    private createFetchFunc(href: string) {
+        return (queryParams?: {[key: string]: string | number }): Promise<ResourceBase | ResourceBase[] | null> => {
+            let url = href;
+            if(queryParams) {
+                // Add additional query params
+                if(url.indexOf('?') > 0) { url = url + '&'; }
+                else { url = url + '?'; }
+                for(var key in queryParams) {
+                    url = url + key + '=' + queryParams[key] + '&';
+                }
+                // Remove the last not needed concatenation character
+                url = url.substring(0, url.length - 1);
+            }
+            return this.fetch(url);
         }
     }
 }
