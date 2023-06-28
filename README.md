@@ -1,7 +1,9 @@
 # fancy-hateoas-client
 A client to interact with HATEOAS resources.
 
-If you provide resources from your web api with hypermedia containing links to related resources as well as information about possible actions on your resource, then this library makes interacting with your web api as simple as possible. 
+If you provide resources from your web api with hypermedia containing links to related resources as well as information about possible actions on your resource, then this library makes interacting with your web api as simple as possible.
+
+> In case you want to use this within an Angular project have a look to [fancy-ngx-hateoas-client](https://github.com/fancyDevelopment/fancy-ngx-hateoas-client)
 
 ## Expected Document
 The library expects that your web api provides metadata about related resources in a key called `_links` and metadata about possible actions in a key called `actions`.

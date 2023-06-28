@@ -1,6 +1,6 @@
 {
   "name": "fancy-hateoas-client",
-  "version": "0.0.7-alpha-8",
+  "version": "0.0.7-alpha-9",
   "description": "A client to interact with HATEOAS resources",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -33,6 +33,17 @@
     "@microsoft/signalr": "^7.0.7",
     "axios": "^1.4.0",
     "rxjs": "^7.8.1"
+  },
+  "peerDependenciesMeta": {
+    "@microsoft/signalr": {
+      "optional": true
+    },
+    "axios": {
+      "optional": true
+    },
+    "rxjs": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@microsoft/signalr": "^7.0.7",

@@ -1,3 +1,4 @@
+import { SignalRSocketManager } from './signalr-socket-manager';
 import { Subject } from 'rxjs';
 import { HateoasClient } from './hateoas-client';
 import { RequestManager } from './request-manager';
@@ -57,7 +58,7 @@ describe('HateoasClient', () => {
 
     beforeEach(() => {
         testRequestManager = new TestRequestManager();
-        target = new HateoasClient(testRequestManager);
+        target = new HateoasClient(testRequestManager, new SignalRSocketManager());
         jest.spyOn(TestRequestManager.prototype, 'fetch');
         jest.spyOn(TestRequestManager.prototype, 'request');
     });
