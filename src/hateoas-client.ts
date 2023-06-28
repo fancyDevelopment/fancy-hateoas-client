@@ -1,7 +1,7 @@
-import { AxiosRequestManager } from ".";
 import { RequestManager } from  "./request-manager";
 import { ResourceBase } from "./resource";
 import { SocketManager } from "./socket-manager";
+
 
 /**
  * An http client which reads the metadata out of json objects and create proper 
@@ -9,19 +9,12 @@ import { SocketManager } from "./socket-manager";
  */
 export class HateoasClient {
 
-    private _requestManager: RequestManager;
-
     /**
      * Creates a new instance of the HateoasClient
      * @param requestManager A request managager to use to execute http requests.
      * @param _socketManager A socket manager to use to work with web sockets.
      */
-    constructor(requestManager?: RequestManager, private _socketManager?: SocketManager) {
-        if(requestManager) {
-            this._requestManager = requestManager;
-        } else {
-            this._requestManager = new AxiosRequestManager();
-        }
+    constructor(private _requestManager: RequestManager, private _socketManager: SocketManager) {
     }
 
     public async fetch(url: string): Promise<ResourceBase | ResourceBase[]> {

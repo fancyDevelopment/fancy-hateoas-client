@@ -21,7 +21,7 @@ See the following document for an example:
     "subObj": {
         "numProp": 5, 
         "_links": {
-            "subObjLinkedResource": "http://myapp.dom.tld/su-obj-linked-resource"
+            "subObjLinkedResource": { "href": "http://myapp.dom.tld/su-obj-linked-resource" }
         },
         "_actions": {
             "create": { "href": "http://myapp.dom.tld/resource/sub-obj", "method": "POST"}

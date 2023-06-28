@@ -1,5 +1,6 @@
 export * from './resource';
 export * from './hateoas-client';
+export * from './hateoas-client-factory';
 export * from './security-token-provider';
 export * from './request-manager';
 export * from './socket-manager';
