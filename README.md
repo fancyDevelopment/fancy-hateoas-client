@@ -41,7 +41,7 @@ The following steps describe the usage of the Hateoas Client based on the exampl
 To retrieve a initial resource from your server create create an instance of the `HateoasClient` and use the fetch method.
 
 ```ts
-const hateoasClient = new HateoasClient();
+const hateoasClient = createDefaultHateoasClient();
 const resource = await hateoasClient.fetch("http://myapp.dom.tld/resource");
 ```
 
